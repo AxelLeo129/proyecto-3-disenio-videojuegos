@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class Player : MonoBehaviour
+public class SecondPlayer : MonoBehaviour
 {
 
     private const string HORIZONTAL = "Horizontal";
@@ -14,7 +14,6 @@ public class Player : MonoBehaviour
     private float angulo_direccion;
     private float fuerza_breack_actual;
     private bool is_braking;
-    //private bool is_paused = false;
     private new AudioSource audio;
 
     [SerializeField] private float fuerza_motor;
@@ -28,13 +27,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform frontRightWheelTransform;
     [SerializeField] private Transform rearLeftWheelTransform;
     [SerializeField] private Transform rearRightWheelTransform;
-    /*[SerializeField] private GameObject boton_pausa;
-    [SerializeField] private GameObject boton_reanudar;
-    [SerializeField] private GameObject boton_next;
-    [SerializeField] private GameObject boton_reiniciar;
-    [SerializeField] private GameObject panel_general;
-    [SerializeField] private Text text_title;
-    [SerializeField] private Text text_message;*/
+ 
 
 
     // Start is called before the first frame update
@@ -46,27 +39,6 @@ public class Player : MonoBehaviour
         if (this.audio)
             this.audio.Stop();
     }
-
-    // Update is called once per frame
-    /*void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-            this.TogglePause();
-    }*/
-
-    /*private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Obstacle"))
-        {
-            //GameObject.FindObjectOfType<AudioManager>().gameOver();
-            ToggleGameOver();
-        }
-        if (collision.gameObject.CompareTag("Win"))
-        {
-            //GameObject.FindObjectOfType<AudioManager>().winGame();
-            ToggleWin();
-        }
-    }*/
 
     public void MainMenu()
     {
@@ -83,50 +55,6 @@ public class Player : MonoBehaviour
     {
         SceneManager.LoadScene(siguiente);
     }
-
-    /*public void ToggleGameOver()
-    {
-        this.text_title.text = "Game Over";
-        this.text_message.text = "No golpee otros autos u obstáculos. \nEvite salirse de la carretera.";
-        this.boton_reanudar.SetActive(false);
-        if(this.boton_next)
-            this.boton_next.SetActive(false);
-        this.boton_reiniciar.SetActive(true);
-        TogglePanel();
-    }*/
-
-    /*public void ToggleWin()
-    {
-        this.text_title.text = "Ganaste";
-        this.text_message.text = "Felicidades has ganado.";
-        this.boton_reanudar.SetActive(false);
-        if (this.boton_next)
-            this.boton_next.SetActive(true);
-        this.boton_reiniciar.SetActive(false);
-        TogglePanel();
-    }*/
-
-    /*public void TogglePause()
-    {
-        this.text_title.text = "Pausa";
-        this.text_message.text = "";
-        this.boton_reanudar.SetActive(true);
-        if (this.boton_next)
-            this.boton_next.SetActive(false);
-        this.boton_reiniciar.SetActive(true);
-        TogglePanel();
-    }*/
-
-    /*public void TogglePanel()
-    {
-        this.audio.Stop();
-        this.is_paused = !this.is_paused;
-        this.boton_pausa.SetActive(!this.is_paused);
-        this.panel_general.SetActive(this.is_paused);
-
-        Time.timeScale = this.is_paused ? 0.0f : 1.0f;
-    }*/
-
     private void FixedUpdate()
     {
         GetInput();
@@ -137,28 +65,28 @@ public class Player : MonoBehaviour
 
     private void GetInput()
     {
-        // Resetear los inputs horizontal y vertical a 0
+        // Inicialización de los inputs horizontal y vertical a 0
         input_horizontal = 0;
         input_vertical = 0;
 
-        // Verificar las teclas WASD para el movimiento horizontal
-        if (Input.GetKey(KeyCode.D))
+        // Verificar las teclas de flecha para el movimiento horizontal
+        if (Input.GetKey(KeyCode.RightArrow))
         {
             input_horizontal = 1;
         }
-        else if (Input.GetKey(KeyCode.A))
+        else if (Input.GetKey(KeyCode.LeftArrow))
         {
             input_horizontal = -1;
         }
 
-        // Verificar las teclas WASD para el movimiento vertical
-        if (Input.GetKey(KeyCode.W))
+        // Verificar las teclas de flecha para el movimiento vertical
+        if (Input.GetKey(KeyCode.UpArrow))
         {
             input_vertical = 1;
             if (!this.audio.isPlaying)
                 this.audio.Play();
         }
-        else if (Input.GetKey(KeyCode.S))
+        else if (Input.GetKey(KeyCode.DownArrow))
         {
             input_vertical = -1;
             if (!this.audio.isPlaying)
@@ -171,8 +99,8 @@ public class Player : MonoBehaviour
         }
 
         // Determinar si el vehículo debe frenar
-        // Nota: Se asume que quieres frenar cuando no se presiona la tecla de adelante (W)
-        // Ajusta la lógica de frenado aquí según tus necesidades
+        // Nota: Asumiendo que quieras frenar cuando no se presiona la tecla de adelante (UpArrow)
+        // Podrías ajustar la lógica de frenado aquí según tus necesidades
         this.is_braking = (input_vertical == 0);
     }
 
@@ -207,7 +135,7 @@ public class Player : MonoBehaviour
         UpdateSingleWheel(this.rearRightWheelCollider, this.rearRightWheelTransform);
     }
 
-    private void UpdateSingleWheel(WheelCollider wheelCollider, Transform wheelTransform) 
+    private void UpdateSingleWheel(WheelCollider wheelCollider, Transform wheelTransform)
     {
         Vector3 posicion;
         Quaternion rotacion;
